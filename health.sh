@@ -6,6 +6,34 @@ set -euo pipefail
 disk_limit="${DISK_LIMIT:-85}"
 mem_limit="${MEM_LIMIT:-80}"
 
+# Check command-line arguments
+quiet=0
+
+if [ "$#" -gt 1 ]; then
+    echo "Error: Too many arguments." >&2
+    echo "Usage: $0 [--quiet]" >&2
+    exit 2
+fi
+
+if [ "${1:-}" = "--quiet" ]; then
+    quiet=1
+elif [ "$#" -eq 1 ]; then
+    echo "Error: Unknown option $1" >&2
+    echo "Usage: $0 [--quiet]" >&2
+    exit 2
+fi
+
+# Check that warning limits are valid numbers
+if [[ ! "$disk_limit" =~ ^[0-9]+$ ]] || (( disk_limit > 100 )); then
+    echo "Error: DISK_LIMIT must be a number between 0 and 100." >&2
+    exit 2
+fi
+
+if [[ ! "$mem_limit" =~ ^[0-9]+$ ]] || (( mem_limit > 100 )); then
+    echo "Error: MEM_LIMIT must be a number between 0 and 100." >&2
+    exit 2
+fi
+
 # Set the log file location
 log_dir="$HOME/logs"
 log_file="$log_dir/health.log"
@@ -15,13 +43,6 @@ mkdir -p "$log_dir"
 
 # Keep track of whether there is a warning
 has_warning=0
-
-# Check if quiet mode is enabled
-quiet=0
-
-if [ "${1:-}" = "--quiet" ]; then
-    quiet=1
-fi
 
 # Write a message to the log file
 log_message() {
