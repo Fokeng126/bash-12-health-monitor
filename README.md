@@ -15,6 +15,10 @@ To create a Bash script that checks disk usage, memory usage, and system load, t
 - ShellCheck
 - Git and GitHub
 
+## Screenshot
+
+![Health Monitor running in terminal](assets/images/health-monitor.png)
+
 ## Features
 
 - Checks disk usage.
