@@ -15,10 +15,6 @@ To create a Bash script that checks disk usage, memory usage, and system load, t
 - ShellCheck
 - Git and GitHub
 
-## Screenshot
-
-Add a screenshot of your health monitor running in the terminal here.
-
 ## Features
 
 - Checks disk usage.
@@ -32,40 +28,84 @@ Add a screenshot of your health monitor running in the terminal here.
 
 ## Installation and Setup
 
-Clone the repository:
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/bash-12-health-monitor.git
+git clone https://github.com/Fokeng126/bash-12-health-monitor.git
 cd bash-12-health-monitor
 ```
 
-Make the script executable:
+### 2. Make the Script Executable
 
 ```bash
 chmod +x health.sh
 ```
 
-Run the health monitor:
+### 3. Create the Health Command
+
+Create the local bin directory if it does not exist:
 
 ```bash
-./health.sh
+mkdir -p ~/.local/bin
+```
+
+Create a symbolic link so the health command can be used from anywhere:
+
+```bash
+ln -sfn "$PWD/health.sh" "$HOME/.local/bin/health"
+```
+
+### 4. Add the Local Bin Directory to PATH
+
+Add the following line to `~/.bashrc` only if it is not already present:
+
+```bash
+grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+```
+
+Reload the Bash configuration:
+
+```bash
+source ~/.bashrc
+```
+
+You can now run the health command from any directory.
+
+### 5. Run the Health Monitor
+
+Run a normal health check:
+
+```bash
+health
 ```
 
 Run in quiet mode:
 
 ```bash
-./health.sh --quiet
+health --quiet
 ```
 
-### Automatic Monitoring with Cron
+### 6. Automatic Monitoring with Cron
 
-Add this line to your crontab to run the monitor every 15 minutes:
+Open your crontab:
+
+```bash
+crontab -e
+```
+
+Add the following line to run the health monitor every 15 minutes:
 
 ```cron
-*/15 * * * * /home/YOUR-USERNAME/.local/bin/health --quiet
+*/15 * * * * /home/your-username/.local/bin/health --quiet
 ```
 
-Replace `YOUR-USERNAME` with your Linux username.
+Replace `your-username` with your Linux username.
+
+The script automatically saves the monitoring results in:
+
+```text
+~/logs/health.log
+```
 
 ## Challenges Faced
 
@@ -73,6 +113,7 @@ Replace `YOUR-USERNAME` with your Linux username.
 - Working with environment variables.
 - Setting up logging and quiet mode.
 - Fixing YAML formatting issues.
+- Configuring symbolic links and cron jobs.
 
 ## What I Learnt
 
@@ -81,6 +122,7 @@ Replace `YOUR-USERNAME` with your Linux username.
 - How to handle warnings and exit codes.
 - How to save system reports in log files.
 - How to automate tasks using cron.
+- How to configure PATH and symbolic links.
 
 ## Author
 
